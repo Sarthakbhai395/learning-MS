@@ -1,0 +1,33 @@
+/* Styles for the lecture grid layout */
+.lecture-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 20px;
+  margin-top: 20px;
+}
+
+.lecture-card {
+  background-color: #fff;
+  padding: 15px;
+  border-radius: 10px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.lecture-card h3 {
+  margin-bottom: 10px;
+  font-size: 1rem;
+}
+
+/* Style for red buttons */
+.red-button {
+  background-color: #ff0000;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  padding: 8px 16px;
+  cursor: pointer;
+}
+
+.red-button:hover {
+  background-color: #e60000; /* Slightly darker red on hover */
+}
