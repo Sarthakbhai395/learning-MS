@@ -5,6 +5,7 @@ import { motion } from "framer-motion";
 import SalesDetails from "./SalesDetails";
 import UsersDetails from "./UsersDetails";
 import { useNavigate, useLocation } from "react-router-dom"; // Added for navigation and location
+import { useSelector } from "react-redux";
 
 // Animation variants for the card (admin)
 const cardVariants = {
@@ -70,6 +71,14 @@ function Dashboard() {
 
   const navigate = useNavigate();
   const location = useLocation(); // To determine the current path
+  const { role } = useSelector((state) => state.auth);
+
+  // Check if user is admin
+  useEffect(() => {
+    if (role !== "admin") {
+      navigate("/login");
+    }
+  }, [role, navigate]);
 
   // Determine if we're in admin or instructor view
   const isInstructorView = location.pathname.startsWith("/instructor");
@@ -92,7 +101,9 @@ function Dashboard() {
       ];
       setCourses(mockCourses);
     }
-  }, [isInstructorView]);useEffect(() => {
+  }, [isInstructorView]);
+
+  useEffect(() => {
     const fetchInstructorCourses = async () => {
       try {
         const response = await fetch("/api/courses/instructor", {

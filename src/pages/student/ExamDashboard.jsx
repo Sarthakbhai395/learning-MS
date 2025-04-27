@@ -70,7 +70,7 @@ function ExamDashboard() {
 
   useEffect(() => {
     if (!user) {
-      navigate('/login');
+      navigate('/');
       return;
     }
     const userId = user?._id || 'defaultUser';

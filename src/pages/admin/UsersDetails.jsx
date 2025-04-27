@@ -4,7 +4,7 @@ import { Card, CardHeader, CardContent } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Badge } from "@/components/ui/badge";
 import { motion } from "framer-motion";
-import { UserIcon, BookOpenIcon, ClockIcon, AwardIcon, BarChart2Icon } from "lucide-react";
+import { User, BookOpen, Clock, Award, BarChart2 } from "lucide-react";
 
 // Animation for the details view
 const detailsVariants = {
@@ -38,7 +38,7 @@ function UsersDetails({ onBack, userData = sampleUserData }) {
                     className="h-14 w-14 rounded-full object-cover"
                   />
                 ) : (
-                  <UserIcon size={32} className="text-purple-600" />
+                  <User size={32} className="text-purple-600" />
                 )}
               </div>
               <div>
@@ -77,7 +77,7 @@ function UsersDetails({ onBack, userData = sampleUserData }) {
                 <Card className="p-4 bg-blue-50">
                   <div className="flex items-center gap-3">
                     <div className="p-3 bg-blue-100 rounded-lg">
-                      <BookOpenIcon size={20} className="text-blue-600" />
+                      <BookOpen size={20} className="text-blue-600" />
                     </div>
                     <div>
                       <p className="text-sm text-gray-500">Enrolled Courses</p>
@@ -89,7 +89,7 @@ function UsersDetails({ onBack, userData = sampleUserData }) {
                 <Card className="p-4 bg-green-50">
                   <div className="flex items-center gap-3">
                     <div className="p-3 bg-green-100 rounded-lg">
-                      <AwardIcon size={20} className="text-green-600" />
+                      <Award size={20} className="text-green-600" />
                     </div>
                     <div>
                       <p className="text-sm text-gray-500">Completed</p>
@@ -168,7 +168,7 @@ function UsersDetails({ onBack, userData = sampleUserData }) {
                 {userData.recentActivity.map((activity, index) => (
                   <div key={index} className="flex gap-3 pb-3 border-b border-gray-100">
                     <div className="p-2 bg-purple-100 rounded-lg h-fit">
-                      <ClockIcon size={16} className="text-purple-600" />
+                      <Clock size={16} className="text-purple-600" />
                     </div>
                     <div>
                       <p className="font-medium text-gray-700">{activity.action}</p>
@@ -189,7 +189,7 @@ function UsersDetails({ onBack, userData = sampleUserData }) {
                 <Card className="p-4 bg-indigo-50">
                   <div className="flex items-center gap-3">
                     <div className="p-3 bg-indigo-100 rounded-lg">
-                      <BookOpenIcon size={20} className="text-indigo-600" />
+                      <BookOpen size={20} className="text-indigo-600" />
                     </div>
                     <div>
                       <p className="text-sm text-gray-500">Knowledge Articles</p>
@@ -201,7 +201,7 @@ function UsersDetails({ onBack, userData = sampleUserData }) {
                 <Card className="p-4 bg-rose-50">
                   <div className="flex items-center gap-3">
                     <div className="p-3 bg-rose-100 rounded-lg">
-                      <BarChart2Icon size={20} className="text-rose-600" />
+                      <BarChart2 size={20} className="text-rose-600" />
                     </div>
                     <div>
                       <p className="text-sm text-gray-500">Knowledge Score</p>

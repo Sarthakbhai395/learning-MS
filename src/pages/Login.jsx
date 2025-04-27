@@ -23,9 +23,11 @@ import { motion } from "framer-motion"; // Import framer-motion for animation
 export function Login() {
   const [signup, setSignup] = useState({ name: "", email: "", password: "", role: "" });
   const [login, setLogin] = useState({ email: "", password: "", role: "" });
-  const [showRoleDropdown, setShowRoleDropdown] = useState(false); // State to manage dropdown visibility
-  const [activeTab, setActiveTab] = useState("Signup"); // State to control the active tab
+  const [showRoleDropdown, setShowRoleDropdown] = useState(false);
+  const [activeTab, setActiveTab] = useState("Signup");
   const navigate = useNavigate();
+
+  const roles = ["user", "instructor", "admin"]; // Add admin role to the list
 
   const [
     registeruser,
@@ -82,10 +84,18 @@ export function Login() {
     e.preventDefault();
     console.log("Login Data:", login);
     try {
-      const response = await loginUser(login).unwrap(); // Unwrap ensures you get the response data
+      const response = await loginUser(login).unwrap();
       if (response) {
         toast.success("Login successful! Welcome");
-        navigate("/"); // Navigate to homepage
+        navigate("/")
+        // Navigate based on role
+        // if (response.user.role === "admin") {
+        //   navigate("/admin/dashboard");
+        // } else if (response.user.role === "instructor") {
+        //   navigate("/instructor/dashboard");
+        // } else {
+        //   navigate("/student/dashboard");
+        // }
       }
     } catch (error) {
       console.error("Login Error Details:", error);
@@ -101,207 +111,161 @@ export function Login() {
   };
 
   return (
-    <div className="flex min-h-screen items-center justify-center">
-      <Tabs value={activeTab} onValueChange={setActiveTab} className="w-[400px]">
-        <TabsList className="grid w-full grid-cols-2">
-          <TabsTrigger value="Signup">Signup</TabsTrigger>
-          <TabsTrigger value="Login">Login</TabsTrigger>
-        </TabsList>
-        <motion.div
-          initial="hidden"
-          animate="visible"
-          exit="exit"
-          variants={tabVariants}
-          key={activeTab} // Ensures animation triggers on tab change
-        >
-          <TabsContent value="Signup">
-            <Card>
+    <div className="min-h-screen flex items-center justify-center bg-gray-100">
+      <Card className="w-[400px]">
+        <CardHeader>
+          <CardTitle>Welcome to LMS</CardTitle>
+          <CardDescription>Login or Signup to continue</CardDescription>
+        </CardHeader>
+        <CardContent>
+          <Tabs value={activeTab} onValueChange={setActiveTab}>
+            <TabsList className="grid w-full grid-cols-2">
+              <TabsTrigger value="Signup">Signup</TabsTrigger>
+              <TabsTrigger value="Login">Login</TabsTrigger>
+            </TabsList>
+            <TabsContent value="Signup">
               <form onSubmit={handleSignupSubmit}>
-                <CardHeader>
-                  <CardTitle>Signup</CardTitle>
-                  <CardDescription>
-                    Create an account to access your dashboard and chat.
-                  </CardDescription>
-                </CardHeader>
-                <CardContent className="space-y-2">
-                  <Label htmlFor="name">Name</Label>
-                  <Input
-                    id="name"
-                    name="name"
-                    type="text"
-                    placeholder="Coder"
-                    value={signup.name}
-                    onChange={handleSignupChange}
-                    required
-                  />
-                  <Label htmlFor="email">Email</Label>
-                  <Input
-                    id="email"
-                    name="email"
-                    type="email"
-                    placeholder="ex@gmail.com"
-                    value={signup.email}
-                    onChange={handleSignupChange}
-                    required
-                  />
-                  <Label htmlFor="password">Password</Label>
-                  <Input
-                    id="password"
-                    name="password"
-                    type="password"
-                    placeholder="@peduarte"
-                    value={signup.password}
-                    onChange={handleSignupChange}
-                    required
-                  />
-                  <Label htmlFor="role">Role</Label>
-                  <div className="relative">
+                <div className="space-y-4">
+                  <div>
+                    <Label htmlFor="name">Name</Label>
                     <Input
-                      id="role"
-                      name="role"
-                      type="text"
-                      placeholder="Select Role"
-                      value={signup.role || ""}
-                      onClick={() => setShowRoleDropdown(!showRoleDropdown)}
-                      readOnly
+                      id="name"
+                      name="name"
+                      value={signup.name}
+                      onChange={handleSignupChange}
+                      required
                     />
-                    {showRoleDropdown && (
-                      <div className="absolute z-10 mt-2 w-full bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-md shadow-lg">
-                        <div className="p-2 space-y-2">
-                          <label className="flex items-center space-x-2">
-                            <input
-                              type="radio"
-                              name="role"
-                              value="instructor"
-                              checked={signup.role === "instructor"}
-                              onChange={() => handleRoleChange("instructor")}
-                            />
-                            <span>Instructor</span>
-                          </label>
-                          <label className="flex items-center space-x-2">
-                            <input
-                              type="radio"
-                              name="role"
-                              value="user"
-                              checked={signup.role === "user"}
-                              onChange={() => handleRoleChange("user")}
-                            />
-                            <span>User</span>
-                          </label>
-                        </div>
-                      </div>
-                    )}
                   </div>
-                </CardContent>
-                {registerError && (
-                  <p className="text-red-500">
-                    {registerError?.data?.message || "Signup failed"}
-                  </p>
-                )}
-                <CardFooter>
-                  <Button disabled={registerIsLoading} type="submit" className="hover:bg-gray-200">
+                  <div>
+                    <Label htmlFor="email">Email</Label>
+                    <Input
+                      id="email"
+                      name="email"
+                      type="email"
+                      value={signup.email}
+                      onChange={handleSignupChange}
+                      required
+                    />
+                  </div>
+                  <div>
+                    <Label htmlFor="password">Password</Label>
+                    <Input
+                      id="password"
+                      name="password"
+                      type="password"
+                      value={signup.password}
+                      onChange={handleSignupChange}
+                      required
+                    />
+                  </div>
+                  <div>
+                    <Label>Role</Label>
+                    <div className="relative">
+                      <Button
+                        type="button"
+                        variant="outline"
+                        className="w-full"
+                        onClick={() => setShowRoleDropdown(!showRoleDropdown)}
+                      >
+                        {signup.role || "Select Role"}
+                      </Button>
+                      {showRoleDropdown && (
+                        <div className="absolute z-10 w-full mt-1 bg-white border rounded-md shadow-lg">
+                          {roles.map((role) => (
+                            <button
+                              key={role}
+                              type="button"
+                              className="w-full px-4 py-2 text-left hover:bg-gray-100"
+                              onClick={() => handleRoleChange(role)}
+                            >
+                              {role.charAt(0).toUpperCase() + role.slice(1)}
+                            </button>
+                          ))}
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                  <Button type="submit" className="w-full" disabled={registerIsLoading}>
                     {registerIsLoading ? (
                       <>
-                        <Loader2 className="mr-2 h-4 w-4 animate-spin" /> Please Wait
+                        <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                        Signing up...
                       </>
                     ) : (
-                      "SignUp"
+                      "Signup"
                     )}
                   </Button>
-                </CardFooter>
+                </div>
               </form>
-            </Card>
-          </TabsContent>
-          <TabsContent value="Login">
-            <Card>
+            </TabsContent>
+            <TabsContent value="Login">
               <form onSubmit={handleLoginSubmit}>
-                <CardHeader>
-                  <CardTitle>Login</CardTitle>
-                  <CardDescription>
-                    Login to access your dashboard and chat.
-                  </CardDescription>
-                </CardHeader>
-                <CardContent className="space-y-2">
-                  <Label htmlFor="current">Email</Label>
-                  <Input
-                    id="current"
-                    name="email"
-                    type="email"
-                    placeholder="ex@gmail.com"
-                    value={login.email}
-                    onChange={handleLoginChange}
-                    required
-                  />
-                  <Label htmlFor="new">Password</Label>
-                  <Input
-                    id="new"
-                    name="password"
-                    type="password"
-                    placeholder="@peduarte"
-                    value={login.password}
-                    onChange={handleLoginChange}
-                    required
-                  />
-                  <Label htmlFor="role">Role</Label>
-                  <div className="relative">
+                <div className="space-y-4">
+                  <div>
+                    <Label htmlFor="loginEmail">Email</Label>
                     <Input
-                      id="role"
-                      name="role"
-                      type="text"
-                      placeholder="Select Role"
-                      value={login.role || ""}
-                      onClick={() => setShowRoleDropdown(!showRoleDropdown)}
-                      readOnly
+                      id="loginEmail"
+                      name="email"
+                      type="email"
+                      value={login.email}
+                      onChange={handleLoginChange}
+                      required
                     />
-                    {showRoleDropdown && (
-                      <div className="absolute z-10 mt-2 w-full bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-md shadow-lg">
-                        <div className="p-2 space-y-2">
-                          <label className="flex items-center space-x-2">
-                            <input
-                              type="radio"
-                              name="role"
-                              value="instructor"
-                              checked={login.role === "instructor"}
-                              onChange={() => handleRoleChange("instructor")}
-                            />
-                            <span>Instructor</span>
-                          </label>
-                          <label className="flex items-center space-x-2">
-                            <input
-                              type="radio"
-                              name="role"
-                              value="user"
-                              checked={login.role === "user"}
-                              onChange={() => handleRoleChange("user")}
-                            />
-                            <span>User</span>
-                          </label>
-                        </div>
-                      </div>
-                    )}
                   </div>
-                </CardContent>
-                {loginError && (
-                  <p className="text-red-500">
-                    {loginError?.data?.message || "Login failed"}
-                  </p>
-                )}
-                <CardFooter>
-                  <Button disabled={loginIsLoading} type="submit" className="hover:bg-gray-200">
+                  <div>
+                    <Label htmlFor="loginPassword">Password</Label>
+                    <Input
+                      id="loginPassword"
+                      name="password"
+                      type="password"
+                      value={login.password}
+                      onChange={handleLoginChange}
+                      required
+                    />
+                  </div>
+                  <div>
+                    <Label>Role</Label>
+                    <div className="relative">
+                      <Button
+                        type="button"
+                        variant="outline"
+                        className="w-full"
+                        onClick={() => setShowRoleDropdown(!showRoleDropdown)}
+                      >
+                        {login.role || "Select Role"}
+                      </Button>
+                      {showRoleDropdown && (
+                        <div className="absolute z-10 w-full mt-1 bg-white border rounded-md shadow-lg">
+                          {roles.map((role) => (
+                            <button
+                              key={role}
+                              type="button"
+                              className="w-full px-4 py-2 text-left hover:bg-gray-100"
+                              onClick={() => handleRoleChange(role)}
+                            >
+                              {role.charAt(0).toUpperCase() + role.slice(1)}
+                            </button>
+                          ))}
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                  <Button type="submit" className="w-full" disabled={loginIsLoading}>
                     {loginIsLoading ? (
                       <>
-                        <Loader2 className="mr-2 h-4 w-4 animate-spin" /> Please Wait
+                        <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                        Logging in...
                       </>
                     ) : (
                       "Login"
                     )}
                   </Button>
-                </CardFooter>
+                </div>
               </form>
-            </Card>
-          </TabsContent>
-        </motion.div>
-      </Tabs>
+            </TabsContent>
+          </Tabs>
+        </CardContent>
+      </Card>
     </div>
   );
 }

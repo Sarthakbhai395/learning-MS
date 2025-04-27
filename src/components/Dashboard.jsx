@@ -1,3 +1,4 @@
+// src/pages/admin/Dashboard.jsx
 import React, { useEffect, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
